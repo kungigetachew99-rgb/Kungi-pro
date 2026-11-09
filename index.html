@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172554">
+<meta name="description" content="Your personal English learning and progress companion.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>FluentStep Pro</title>
+<style>
+:root{--navy:#172554;--blue:#2563eb;--sky:#eff6ff;--ink:#172033;--muted:#64748b;--line:#e2e8f0;--bg:#f5f7fb;--green:#15803d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:var(--navy);color:white;padding:18px 16px 16px;position:sticky;top:0;z-index:5}
+.top{max-width:1000px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+h1{font-size:21px;margin:0}header p{margin:2px 0 0;color:#cbd5e1;font-size:12px}
+main{max-width:1000px;margin:18px auto;padding:0 13px 90px}
+nav{display:flex;gap:7px;overflow:auto;padding:2px 0 12px;scrollbar-width:thin}
+nav button{white-space:nowrap;border:1px solid var(--line);background:white;color:var(--ink);padding:9px 12px;border-radius:12px}
+nav button.active{background:var(--blue);color:white;border-color:var(--blue)}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:16px;margin:10px 0;box-shadow:0 2px 10px #0f172a08}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.stat{background:var(--sky);border-radius:13px;padding:13px}.stat strong{font-size:24px;display:block;color:var(--navy)}
+h2{font-size:19px;margin:0 0 12px}h3{font-size:15px;margin:0 0 8px}
+label{display:block;font-size:13px;font-weight:650;margin:10px 0 4px}
+input,textarea,select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;background:white;font:inherit;color:var(--ink)}
+textarea{min-height:75px;resize:vertical}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+button,.btn{border:0;border-radius:10px;padding:10px 14px;background:var(--blue);color:white;font:inherit;font-weight:650;cursor:pointer}
+button.secondary{background:#e2e8f0;color:#1e293b}button.danger{background:#b91c1c}button.small{padding:6px 9px;font-size:12px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.word{border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}
+.wordtop{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.wordtop strong{font-size:17px}.muted{color:var(--muted);font-size:13px}
+.tag{display:inline-block;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:99px;font-size:11px}
+.hidden{display:none!important}.progress{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:#16a34a;width:0}
+.task{display:flex;gap:9px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line)}.task input{width:auto;margin-top:5px}
+.notice{padding:10px 12px;background:#fef3c7;border-radius:10px;color:#854d0e;font-size:13px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(min-width:700px){main{padding-left:20px;padding-right:20px}}
+</style>
+</head>
+<body>
+<header><div class="top"><div><h1>FluentStep Pro</h1><p>Your learning. Your words. Your progress.</p></div><div id="clock" aria-live="off"></div></div></header>
+<main>
+<nav id="tabs">
+<button data-tab="home" class="active">Dashboard</button><button data-tab="vocab">My Vocabulary</button><button data-tab="revision">Revision</button><button data-tab="writing">Writing</button><button data-tab="practice">Practice</button><button data-tab="coding">Coding</button><button data-tab="study">Bible Study</button><button data-tab="schedule">Schedule</button><button data-tab="reports">Reports & Backup</button>
+</nav>
+<section id="home" class="panel">
+<div class="card"><h2>Welcome to your learning dashboard</h2><div class="grid">
+<div class="stat"><span class="muted">Words saved</span><strong id="totalWords">0</strong></div>
+<div class="stat"><span class="muted">Today's words</span><strong id="todayWords">0</strong></div>
+<div class="stat"><span class="muted">Days recorded</span><strong id="daysCount">0</strong></div>
+<div class="stat"><span class="muted">Annual word target</span><strong id="targetPct">0%</strong></div>
+</div><p class="muted">Target: 1,825 personally selected words in one year. Your entries are stored on this device.</p><div class="progress"><div id="targetBar"></div></div></div>
+<div class="card"><h2>Today's learning checklist</h2><div id="todayTasks"></div><p class="muted">Your checklist is saved automatically on this device.</p></div>
+<div class="card"><h2>Quick add a word</h2><div class="row"><div><label>English word *</label><input id="quickWord" placeholder="e.g. innovation"></div><div><label>Meaning *</label><input id="quickMeaning" placeholder="What does it mean?"></div></div><button id="quickAdd" style="margin-top:12px">Save word</button></div>
+</section>
+<section id="vocab" class="panel hidden">
+<div class="card"><h2>My Personal English Dictionary</h2><p class="muted">Add words you choose. Each entry is saved automatically and stays until you delete it.</p>
+<form id="wordForm"><input type="hidden" id="editId"><div class="row"><div><label>English word *</label><input id="word" required maxlength="100"></div><div><label>Category</label><input id="category" placeholder="Business, science, daily life..."></div></div>
+<label>Meaning *</label><textarea id="meaning" required></textarea><label>Example sentence</label><textarea id="example"></textarea>
+<div class="row"><div><label>Synonyms</label><input id="synonyms" placeholder="Separate with commas"></div><div><label>Antonyms</label><input id="antonyms" placeholder="Separate with commas"></div></div>
+<div class="actions"><button type="submit" id="saveWord">Save to dictionary</button><button type="reset" class="secondary" id="clearForm">Clear</button></div></form></div>
+<div class="card"><h2>Search your dictionary</h2><div class="row"><div><label>Search word or meaning</label><input id="searchWords" placeholder="Type to search..."></div><div><label>Filter by category</label><input id="filterCategory" placeholder="e.g. technology"></div><div><label>Filter by date</label><input type="date" id="filterDate"></div></div><p class="muted" id="wordCount"></p><div id="wordList"></div></div>
+</section>
+<section id="revision" class="panel hidden">
+<div class="card"><h2>Vocabulary revision</h2><p class="muted">Quiz yourself using the words in your own dictionary.</p><div id="quizArea"><p>Add at least one word to start a revision quiz.</p></div><div class="actions"><button id="startQuiz">Start / New question</button><button id="showAnswer" class="secondary">Show answer</button></div><p id="quizFeedback" aria-live="polite"></p></div>
+</section>
+<section id="writing" class="panel hidden">
+<div class="card"><h2>Daily writing practice</h2><label>Today's writing</label><textarea id="writingText" placeholder="Write a paragraph, journal entry, or summary..."></textarea><div class="actions"><button id="saveWriting">Save writing</button><button id="clearWriting" class="secondary">Clear editor</button></div><p class="muted" id="writingStatus">Writing is stored by date on this device.</p></div>
+<div class="card"><h2>Writing history</h2><div id="writingHistory"></div></div>
+</section>
+<section id="practice" class="panel hidden">
+<div class="card"><h2>English practice tracker</h2><p class="muted">Record practice sessions. Use your preferred conversation partner or podcast app.</p><label>Activity</label><select id="practiceType"><option>English conversation</option><option>Podcast listening</option><option>Reading</option><option>Pronunciation practice</option><option>Other</option></select><label>Minutes completed</label><input type="number" id="practiceMinutes" min="1" max="1440" value="30"><label>Notes</label><textarea id="practiceNotes" placeholder="What did you practise or learn?"></textarea><button id="savePractice">Save session</button></div><div class="card"><h2>Recent sessions</h2><div id="practiceHistory"></div></div></section>
+<section id="coding" class="panel hidden"><div class="card"><h2>Coding Academy tracker</h2><label>Topic or project</label><input id="codeTopic" placeholder="e.g. Python functions / JavaScript DOM"><label>What did you work on?</label><textarea id="codeNotes"></textarea><label>Minutes</label><input type="number" id="codeMinutes" min="1" value="60"><button id="saveCoding">Save coding session</button></div><div class="card"><h2>Coding history</h2><div id="codingHistory"></div></div></section>
+<section id="study" class="panel hidden"><div class="card"><h2>Bible study tracker</h2><label>Reading / passage</label><input id="biblePassage" placeholder="Book and chapter"><label>Notes (optional)</label><textarea id="bibleNotes"></textarea><button id="saveBible">Save study record</button></div><div class="card"><h2>Study history</h2><div id="bibleHistory"></div></div></section>
+<section id="schedule" class="panel hidden"><div class="card"><h2>Daily schedule</h2><p class="muted">Edit times to match your current timetable. Times are reminders, not enforced alarms.</p><div id="scheduleList"></div><div class="actions"><button id="saveSchedule">Save schedule</button><button id="notifyPermission" class="secondary">Enable notifications</button></div><p class="notice">Browser notifications depend on Android, Chrome permissions, battery settings and whether the app is active. A web app cannot guarantee exact alarms while fully closed.</p></div></section>
+<section id="reports" class="panel hidden"><div class="card"><h2>Learning reports</h2><div class="grid"><div class="stat"><span class="muted">Words this month</span><strong id="monthWords">0</strong></div><div class="stat"><span class="muted">Words this year</span><strong id="yearWords">0</strong></div><div class="stat"><span class="muted">Writing entries</span><strong id="writingCount">0</strong></div><div class="stat"><span class="muted">Practice sessions</span><strong id="practiceCount">0</strong></div></div><h3 style="margin-top:18px">Monthly vocabulary history</h3><div id="monthlyReport"></div></div>
+<div class="card"><h2>Backup and restore</h2><p class="muted">Export regularly. Browser storage can be cleared if you reset Chrome or remove site data.</p><div class="actions"><button id="exportJson">Download full backup (JSON)</button><button id="exportCsv" class="secondary">Export vocabulary (CSV)</button></div><label>Restore a FluentStep JSON backup</label><input type="file" id="restoreFile" accept="application/json"><button id="restoreBtn" class="secondary" style="margin-top:10px">Restore backup</button><p id="backupStatus" class="muted"></p></div></section>
+<footer>FluentStep Pro · Your records stay on this device unless you export a backup.</footer>
+</main>
+<script src="app.js"></script>
+</body></html>
